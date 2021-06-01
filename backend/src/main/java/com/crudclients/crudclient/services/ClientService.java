@@ -25,60 +25,45 @@ public class ClientService {
 	private ClientRepository repository;
 
 
-	@Transactional(readOnly = true)
-	public Page<ClientDTO> findAllPaged(PageRequest pageRequest) {
+	@Transactional (readOnly = true)
+	public Page<ClientDTO> findAllPaged(PageRequest pageRequest){
 		Page<Client> list = repository.findAll(pageRequest);
 		return list.map(x -> new ClientDTO(x));
 	}
-
-	@Transactional(readOnly = true)
+	@Transactional (readOnly = true)
 	public ClientDTO findById(Long id) {
 		Optional<Client> obj = repository.findById(id);
 		Client entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
-		return new ClientDTO(entity, entity.getCategories());
+		return new ClientDTO(entity);
 	}
-
 	@Transactional
-	public ProductDTO insert(ProductDTO dto) {
-		Product entity = new Product();
-		copyDtoToEntity(dto, entity);
+	public ClientDTO insert(ClientDTO dto) {
+		Client entity = new Client();
+		entity.setName(dto.getName());
 		entity = repository.save(entity);
-		return new ProductDTO(entity);
+		return new ClientDTO(entity);
 	}
-
 	@Transactional
-	public ProductDTO update(Long id, ProductDTO dto) {
+	public ClientDTO update(Long id, ClientDTO dto) {
 		try {
-			Product entity = repository.getOne(id);
-			copyDtoToEntity(dto, entity);
+			Client entity = repository.getOne(id);
+			entity.setName(dto.getName());
 			entity = repository.save(entity);
-			return new ProductDTO(entity);
-		} catch (EntityNotFoundException e) {
+			return new ClientDTO(entity);
+		}
+		catch(EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Id not found" + id);
 		}
 	}
-
 	public void delete(Long id) {
 		try {
 			repository.deleteById(id);
-		} catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundException("Id not found" + id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DatabaseException("Integrity Violation");
 		}
-	}
-
-	private void copyDtoToEntity(ProductDTO dto, Product entity) {
-		entity.setName(dto.getName());
-		entity.setDescription(dto.getDescription());
-		entity.setDate(dto.getDate());
-		entity.setImgUrl(dto.getImgUrl());
-		entity.setPrice(dto.getPrice());
-
-		entity.getCategories().clear();
-		for (CategoryDTO catDto : dto.getCategories()) {
-			Category category = categoryRepository.getOne(catDto.getId());
-			entity.getCategories().add(category);
+		catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException("Id not found" + id);
+		}
+		catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Integrity Violation");
 		}
 	}
 }

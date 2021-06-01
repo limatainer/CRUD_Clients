@@ -19,10 +19,9 @@ public class Client implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private String cpf;
+	private String cpf;	
 	private Double income;
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-	
 	private Instant birthDate;
 	private Integer children;
 	
