@@ -2,6 +2,12 @@
 
 <img src="https://github.com/limatainer/CRUD_Clients/blob/master/crud.png"/>
 
+
+- [x] Finish basic concept
+- [x] Push my commits to GitHub
+- [x] Integrate with local DB for tests
+- [x] Test with Postman
+
 🌱 I am a Junior Full Stacker Seed about to grow as a strong tree
 
 ⚡ OPEN TO COLAB
